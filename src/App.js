@@ -48,6 +48,10 @@ function App() {
     setExpanded(!expanded);
   };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   async function fetchData() {
     try {
       let res = await fetch('https://randomuser.me/api');
@@ -58,24 +62,13 @@ function App() {
       console.error('error', er);
     }
   }
-  function refresh (){
+
+  function refresher (){
     setIsLoading(true);
     fetchData();
   }
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        let res = await fetch('https://randomuser.me/api');
-        let data = await res.json();
-        setUserData(data.results[0]);
-        setIsLoading(false);
-      } catch (er) {
-        console.error('error', er);
-      }
-    }
-    fetchData();
-  }, []);
+
   return (
     <Grid container alignItems="center" justify="center" direction="column" className={classes.root} >
          
@@ -146,7 +139,7 @@ function App() {
        
       )}
       <IconButton aria-label="share">
-        < RefreshIcon onClick={refresh}/>
+        < RefreshIcon onClick={refresher}/>
       </IconButton>
     </Grid>
   );
