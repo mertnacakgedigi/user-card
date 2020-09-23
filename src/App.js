@@ -15,6 +15,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import LocationIcon from '@material-ui/icons/LocationOn';
 import Grid from '@material-ui/core/Grid';
 import ContentLoader from 'react-content-loader';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import './App.css';
 
 const useStyles = makeStyles((theme) => ({
@@ -47,6 +48,21 @@ function App() {
     setExpanded(!expanded);
   };
 
+  async function fetchData() {
+    try {
+      let res = await fetch('https://randomuser.me/api');
+      let data = await res.json();
+      setUserData(data.results[0]);
+      setIsLoading(false);
+    } catch (er) {
+      console.error('error', er);
+    }
+  }
+  function refresh (){
+    setIsLoading(true);
+    fetchData();
+  }
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -60,15 +76,15 @@ function App() {
     }
     fetchData();
   }, []);
-  console.log(userData, 'check');
   return (
-    <Grid container alignItems="center" justify="center" className={classes.root} >
+    <Grid container alignItems="center" justify="center" direction="column" className={classes.root} >
+         
       {isLoading ? (
         <ContentLoader
           speed={2}
           width={400}
-          height={460}
-          viewBox="0 0 400 460"
+          height={300}
+          viewBox="0 0 400 300"
           backgroundColor="#f3f3f3"
           foregroundColor="#ecebeb"
           style={{ marginLeft: '180px' }}>
@@ -126,7 +142,12 @@ function App() {
             </CardContent>
           </Collapse>
         </Card>
+                     
+       
       )}
+      <IconButton aria-label="share">
+        < RefreshIcon onClick={refresh}/>
+      </IconButton>
     </Grid>
   );
 }
